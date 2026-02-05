@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os 
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 
 class DataLoader():
     def __init__(self, filepath):
@@ -72,3 +74,19 @@ cleaner.Duplicate_values()
 
 content2 = content.sort_values(by="Country")
 print(content2.head(5))
+
+df = pd.read_csv("deaths_and_causes_synthetic.csv")
+
+cause_dummies = pd.get_dummies(df["Cause_of_Death"])
+X = pd.concat([df["Year"], cause_dummies], axis=1)
+y = df["Number_of_Deaths"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state= 42)
+
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+print("Predictions", predictions[:10])
+print("Actual", y_test.values[:10])
