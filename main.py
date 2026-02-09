@@ -90,3 +90,6 @@ predictions = model.predict(X_test)
 
 print("Predictions", predictions[:10])
 print("Actual", y_test.values[:10])
+
+df["Predicted_Deaths"] = model.predict(X)
+print(df[["Year", "Cause_of_Death", "Number_of_Deaths", "Predicted_Deaths"]].to_string(index=False))
